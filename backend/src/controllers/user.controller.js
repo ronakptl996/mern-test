@@ -103,4 +103,16 @@ const registerHandler = asyncHandler(async (req, res) => {
   }
 });
 
-export { loginHandler, registerHandler };
+const getUserDetails = asyncHandler(async (req, res) => {
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        decoded: req.user,
+      },
+      ""
+    )
+  );
+});
+
+export { loginHandler, registerHandler, getUserDetails };

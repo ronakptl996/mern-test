@@ -64,4 +64,15 @@ const checkSlugArticle = asyncHandler(async (req, res) => {
   }
 });
 
-export { addArticle, checkSlugArticle };
+const getAllArticle = asyncHandler(async (req, res) => {
+  try {
+    const allArticle = await Article.find().populate("createdBy", "username");
+
+    return res.status(200).json(new ApiResponse(200, allArticle, ""));
+  } catch (error) {
+    console.log({ error });
+    throw new ApiError(500, "Something went wrong while get articles!");
+  }
+});
+
+export { addArticle, checkSlugArticle, getAllArticle };

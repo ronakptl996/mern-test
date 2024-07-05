@@ -4,6 +4,7 @@ const initialState = {
   isAuth: false,
   loggedInUser: {},
   isLoading: true,
+  articles: [],
 };
 
 export const authSlice = createSlice({
@@ -20,11 +21,18 @@ export const authSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setArticles: (state, action) => {
+      state.articles = action.payload;
+    },
   },
 });
 
-export const { setIsLoggedIn, setLoggedInUserDetails, setLoading } =
-  authSlice.actions;
+export const {
+  setIsLoggedIn,
+  setLoggedInUserDetails,
+  setLoading,
+  setArticles,
+} = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -53,6 +61,28 @@ export function fetchLoggedInUserDetails() {
       console.log(error);
     } finally {
       dispatch(setLoading(false));
+    }
+  };
+}
+
+export function fetchAllArticles() {
+  return async function fetchAllArticlesThunk(dispatch, getState) {
+    try {
+      const result = await fetch(`/api/article`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const response = await result.json();
+
+      console.log({ response });
+      if (response.success) {
+        dispatch(setArticles(response.data));
+      }
+    } catch (error) {
+      console.error("Something went wrong!!");
     }
   };
 }

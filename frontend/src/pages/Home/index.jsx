@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Container, Grid } from "@mui/material";
+import ArticleCard from "../../components/ArticleCard";
+import { fetchAllArticles } from "../../features/auth/authSlice";
 
 const Home = () => {
-  return <div>Home</div>;
+  const dispatch = useDispatch();
+
+  const { articles } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchAllArticles());
+  }, []);
+
+  return (
+    <Container>
+      <Grid container spacing={2}>
+        {articles.map((article) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={article.id}>
+            <ArticleCard data={article} />
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
+  );
 };
 
 export default Home;

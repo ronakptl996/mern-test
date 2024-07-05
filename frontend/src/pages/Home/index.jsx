@@ -11,14 +11,14 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(fetchAllArticles());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>
       <Grid container spacing={2}>
         {articles.map((article) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={article.id}>
-            <ArticleCard data={article} />
+          <Grid item xs={12} sm={6} md={4} lg={4} key={article._id}>
+            <ArticleCard {...article} />
           </Grid>
         ))}
       </Grid>

@@ -5,6 +5,13 @@ import { Article } from "../models/article.model.js";
 
 const addArticle = asyncHandler(async (req, res) => {
   console.log(req.body);
+
+  if (!title || !description || !category || !slug) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, {}, "All field is required!"));
+  }
+
   const { title, description, category, slug } = req.body;
 
   const existedArticle = await Article.findOne({ slug });
@@ -75,4 +82,76 @@ const getAllArticle = asyncHandler(async (req, res) => {
   }
 });
 
-export { addArticle, checkSlugArticle, getAllArticle };
+const updateArticle = asyncHandler(async (req, res) => {
+  const { title, description, articleId } = req.body;
+
+  if (!articleId || !title || !description) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, {}, "All field is required!"));
+  }
+
+  const articleData = await Article.findById(articleId);
+  console.log({ articleData });
+
+  if (!articleData) {
+    return res.status(404).json(new ApiResponse(404, {}, "Article not found!"));
+  }
+
+  if (articleData.createdBy !== req.user._id) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, {}, "You can not update this article!"));
+  }
+
+  try {
+    const updatedData = await Article.findByIdAndUpdate(
+      articleId,
+      {
+        title,
+        description,
+      },
+      { new: true }
+    );
+
+    if (!updatedData) {
+      return res
+        .status(500)
+        .json(new ApiResponse(500, [], "Error while updating article!"));
+    }
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, updatedData, "Article updated successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong!");
+  }
+});
+
+const deleteArticle = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    throw new ApiError(401, "Article ID is required!");
+  }
+
+  try {
+    const data = await Article.findByIdAndDelete(id);
+
+    if (!data) throw new ApiError(500, "Data not found!");
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, data, "Article deleted successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Error while delete article", error);
+  }
+});
+
+export {
+  addArticle,
+  checkSlugArticle,
+  getAllArticle,
+  updateArticle,
+  deleteArticle,
+};

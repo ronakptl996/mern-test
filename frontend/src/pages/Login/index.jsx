@@ -48,7 +48,6 @@ const Login = () => {
       validationSchema: signInSchema,
       initialValues: initialValues,
       onSubmit: async (values) => {
-        console.log({ values });
         await handleLogin(values);
       },
     });

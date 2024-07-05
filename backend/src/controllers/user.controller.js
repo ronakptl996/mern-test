@@ -26,8 +26,6 @@ const loginHandler = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  console.log({ user });
-
   if (!user) {
     return res
       .status(404)
@@ -35,7 +33,6 @@ const loginHandler = asyncHandler(async (req, res) => {
   }
 
   const isPasswordValid = await user.isPasswordCorrect(password);
-  console.log("isPasswordValid", isPasswordValid);
 
   if (!isPasswordValid) {
     return res
@@ -98,7 +95,6 @@ const registerHandler = asyncHandler(async (req, res) => {
       .status(201)
       .json(new ApiResponse(200, createdData, "User registered Successfully"));
   } catch (error) {
-    console.log({ error });
     throw new ApiError(500, "Error while register user");
   }
 });

@@ -64,25 +64,3 @@ export function fetchLoggedInUserDetails() {
     }
   };
 }
-
-export function fetchAllArticles() {
-  return async function fetchAllArticlesThunk(dispatch, getState) {
-    try {
-      const result = await fetch(`/api/article`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const response = await result.json();
-
-      console.log({ response });
-      if (response.success) {
-        dispatch(setArticles(response.data));
-      }
-    } catch (error) {
-      console.error("Something went wrong!!");
-    }
-  };
-}

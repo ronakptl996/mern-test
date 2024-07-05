@@ -34,13 +34,11 @@ const AddArticle = () => {
       validationSchema: articleSchema,
       initialValues,
       onSubmit: async (values) => {
-        console.log({ values });
         await handleAddArticle(values);
       },
     });
 
   const handleAddArticle = async (data) => {
-    console.log(data);
     try {
       dispatch(setLoading(true));
       const result = await fetch(`/api/article/add`, {
@@ -54,7 +52,6 @@ const AddArticle = () => {
 
       const response = await result.json();
 
-      console.log({ response });
       if (response.success) {
         toast.success(response.message);
       } else {

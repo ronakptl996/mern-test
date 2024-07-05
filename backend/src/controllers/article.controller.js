@@ -4,8 +4,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { Article } from "../models/article.model.js";
 
 const addArticle = asyncHandler(async (req, res) => {
-  console.log(req.body);
-
   const { title, description, category, slug } = req.body;
 
   if (!title || !description || !category || !slug) {
@@ -41,7 +39,6 @@ const addArticle = asyncHandler(async (req, res) => {
       .status(201)
       .json(new ApiResponse(201, createdData, "Article add successfully"));
   } catch (error) {
-    console.log({ error });
     throw new ApiError(500, "Error while add article");
   }
 });
@@ -66,7 +63,6 @@ const checkSlugArticle = asyncHandler(async (req, res) => {
 
     return res.status(200).json(new ApiResponse(200, [], ""));
   } catch (error) {
-    console.log({ error });
     throw new ApiError(500, "Something went wrong!");
   }
 });
@@ -114,7 +110,6 @@ const getSearchArticle = asyncHandler(async (req, res) => {
 
     return res.status(200).json(new ApiResponse(200, populatedArticles, ""));
   } catch (error) {
-    console.log({ error });
     throw new ApiError(500, "Something went wrong while get articles!");
   }
 });

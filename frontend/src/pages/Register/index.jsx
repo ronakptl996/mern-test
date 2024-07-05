@@ -47,7 +47,6 @@ const Register = () => {
       validationSchema: signUpSchema,
       initialValues: initialValues,
       onSubmit: async (values) => {
-        console.log({ values });
         await handleRegister(values);
       },
     });
@@ -71,7 +70,6 @@ const Register = () => {
       });
       const response = await result.json();
 
-      console.log({ response });
       if (response.success) {
         toast.success(response.message);
         navigate("/login");

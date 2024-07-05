@@ -5,11 +5,9 @@ import {
   TextField,
   Button,
   CssBaseline,
-  FormControlLabel,
   FormControl,
   InputLabel,
   Grid,
-  Checkbox,
   Box,
   OutlinedInput,
   InputAdornment,
@@ -18,21 +16,21 @@ import {
   Typography,
   Container,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signInSchema } from "../../Schemas";
+import { signUpSchema } from "../../Schemas";
 import {
   setIsLoggedIn,
   setLoading,
   setLoggedInUserDetails,
 } from "../../features/auth/authSlice";
+import PersonIcon from "@mui/icons-material/Person";
 import { toast } from "react-toastify";
 
-const Login = () => {
+const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
@@ -41,15 +39,16 @@ const Login = () => {
   const initialValues = {
     email: "",
     password: "",
+    username: "",
   };
 
   const { values, handleBlur, handleChange, handleSubmit, errors, touched } =
     useFormik({
-      validationSchema: signInSchema,
+      validationSchema: signUpSchema,
       initialValues: initialValues,
       onSubmit: async (values) => {
         console.log({ values });
-        await handleLogin(values);
+        await handleRegister(values);
       },
     });
 
@@ -59,10 +58,10 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const handleLogin = async (data) => {
+  const handleRegister = async (data) => {
     try {
       dispatch(setLoading(true));
-      const result = await fetch(`/api/user/login`, {
+      const result = await fetch(`/api/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,8 +74,7 @@ const Login = () => {
       console.log({ response });
       if (response.success) {
         toast.success(response.message);
-        dispatch(setLoggedInUserDetails(data.data));
-        navigate("/");
+        navigate("/login");
       } else {
         dispatch(setIsLoggedIn(false));
         toast.error(response.message);
@@ -101,10 +99,10 @@ const Login = () => {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <PersonIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign In
           </Typography>
           <Box
             component="form"
@@ -112,6 +110,19 @@ const Login = () => {
             noValidate
             sx={{ mt: 1 }}
           >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.username && errors.username ? true : false}
+              helperText={touched.username && errors.username}
+            />
             <TextField
               margin="normal"
               required
@@ -133,7 +144,7 @@ const Login = () => {
               error={touched.password && Boolean(errors.password)}
             >
               <InputLabel htmlFor="outlined-adornment-password">
-                Password
+                Password *
               </InputLabel>
               <OutlinedInput
                 fullWidth
@@ -160,10 +171,6 @@ const Login = () => {
                 <FormHelperText>{errors?.password}</FormHelperText>
               )}
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -173,13 +180,8 @@ const Login = () => {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/login">{"Do you have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </Box>
@@ -189,4 +191,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

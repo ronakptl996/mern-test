@@ -32,7 +32,6 @@ export function fetchLoggedInUserDetails() {
   return async function fetchLoggedInUserDetailsThunk(dispatch, getState) {
     try {
       dispatch(setLoading(true));
-      // let accessToken = getCookie("accessToken");
       try {
         let response = await fetch(`/api/user`, {
           headers: {

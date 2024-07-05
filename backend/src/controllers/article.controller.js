@@ -71,11 +71,37 @@ const checkSlugArticle = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllArticle = asyncHandler(async (req, res) => {
-  try {
-    const allArticle = await Article.find().populate("createdBy", "username");
+const getSerchArticle = asyncHandler(async (req, res) => {
+  const { q = "", sortField = "createdAt", sortBy = "desc" } = req.query;
 
-    return res.status(200).json(new ApiResponse(200, allArticle, ""));
+  try {
+    const searchQuery = new RegExp(q, "i");
+
+    const pipelineStages = [
+      {
+        $match: {
+          $or: [{ title: searchQuery }, { description: searchQuery }],
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          createdAt: 1,
+          _id: 1,
+          createdBy: 1,
+          category: 1,
+          slug: 1,
+        },
+      },
+      {
+        $sort: { [sortField]: sortBy === "asc" ? 1 : -1 },
+      },
+    ];
+
+    const articles = await Article.aggregate(pipelineStages);
+
+    return res.status(200).json(new ApiResponse(200, articles, ""));
   } catch (error) {
     console.log({ error });
     throw new ApiError(500, "Something went wrong while get articles!");
@@ -151,7 +177,7 @@ const deleteArticle = asyncHandler(async (req, res) => {
 export {
   addArticle,
   checkSlugArticle,
-  getAllArticle,
+  getSerchArticle,
   updateArticle,
   deleteArticle,
 };

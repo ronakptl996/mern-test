@@ -6,13 +6,13 @@ import { Article } from "../models/article.model.js";
 const addArticle = asyncHandler(async (req, res) => {
   console.log(req.body);
 
+  const { title, description, category, slug } = req.body;
+
   if (!title || !description || !category || !slug) {
     return res
       .status(404)
       .json(new ApiResponse(404, {}, "All field is required!"));
   }
-
-  const { title, description, category, slug } = req.body;
 
   const existedArticle = await Article.findOne({ slug });
 
@@ -98,7 +98,7 @@ const updateArticle = asyncHandler(async (req, res) => {
     return res.status(404).json(new ApiResponse(404, {}, "Article not found!"));
   }
 
-  if (articleData.createdBy !== req.user._id) {
+  if (articleData.createdBy.toString() !== req.user._id.toString()) {
     return res
       .status(404)
       .json(new ApiResponse(404, {}, "You can not update this article!"));

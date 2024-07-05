@@ -1,13 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Grid } from "@mui/material";
 import ArticleCard from "../../components/ArticleCard";
 import { fetchAllArticles } from "../../features/auth/authSlice";
 
 const Home = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("desc");
+
   const dispatch = useDispatch();
 
   const { articles } = useSelector((state) => state.auth);
+
+  const fetchArticles = async () => {
+    try {
+      let url = '/api/article';
+      if (searchQuery) {
+        url += `/search?q=${encodeURIComponent(searchQuery)}`;
+      } else if (sortBy) {
+        url += `/sort?sortBy=${sortBy}`;
+      }
+      const response = await fetch(url);
+      const data = await response.json();
+      
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchAllArticles());

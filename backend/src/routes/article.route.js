@@ -4,14 +4,14 @@ import {
   addArticle,
   checkSlugArticle,
   deleteArticle,
-  getSerchArticle,
+  getSearchArticle,
   updateArticle,
 } from "../controllers/article.controller.js";
 
 const router = Router();
 
 router.route("/add").post(verifyJwt, addArticle);
-router.route("/search").get(verifyJwt, getSerchArticle);
+router.route("/search").get(verifyJwt, getSearchArticle);
 router.route("/checkSlug").get(verifyJwt, checkSlugArticle);
 router.route("/update").patch(verifyJwt, updateArticle);
 router.route("/delete/:id").delete(verifyJwt, deleteArticle);

@@ -60,7 +60,7 @@ const Navbar = () => {
     }
   };
   return (
-    <AppBar position="static">
+    <AppBar position="static" className="navbar">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -112,12 +112,12 @@ const Navbar = () => {
                 }}
               >
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
+                  <Typography textAlign="center" className="nav">
                     <Link to="/">Home</Link>
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
+                  <Typography textAlign="center" className="nav">
                     <Link to="/add">Add Article</Link>
                   </Typography>
                 </MenuItem>

@@ -72,7 +72,6 @@ const Login = () => {
       });
       const response = await result.json();
 
-      console.log({ response });
       if (response.success) {
         toast.success(response.message);
         dispatch(setLoggedInUserDetails(data.data));

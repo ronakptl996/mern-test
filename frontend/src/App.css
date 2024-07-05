@@ -1,3 +1,62 @@
 body {
   margin: 0;
 }
+
+/* Navbar */
+.navbar a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.css-1uwgr7b-MuiTypography-root a {
+  text-decoration: none !important;
+}
+
+/* Loading - ProtectedRoute */
+.loading-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.loading.css-18lrjg1-MuiCircularProgress-root {
+  color: #3498db !important;
+}
+
+.loading-wrapper h3 {
+  color: #00000075;
+  margin-top: 15px;
+  letter-spacing: 1px;
+}
+
+/* ^OUTLET */
+.main {
+  min-height: 90vh;
+}
+
+.article-card {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  margin: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.article-desc {
+  min-height: 110px;
+}
+
+.no-data-found {
+  display: grid;
+  place-items: center;
+  margin: auto;
+}
+
+.no-data-found img {
+  width: 200px;
+}

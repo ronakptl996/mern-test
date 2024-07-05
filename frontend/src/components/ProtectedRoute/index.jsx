@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchLoggedInUserDetails } from "../../features/auth/authSlice";
+import Loading from "../Loading";
 
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [isLoading, isAuth]);
 
-  return isLoading ? <h1>Loading...</h1> : <>{children}</>;
+  return isLoading ? <Loading /> : <>{children}</>;
 };
 
 export default ProtectedRoute;

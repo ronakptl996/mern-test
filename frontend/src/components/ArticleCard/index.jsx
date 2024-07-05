@@ -11,6 +11,10 @@ import {
   TextField,
   DialogContent,
   DialogActions,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { capitalizeFirstLetter } from "../../utils";
@@ -31,18 +35,20 @@ const ArticleCard = ({
   const [modalForm, setModalForm] = useState({
     title: "",
     description: "",
+    category: "",
     articleId: "",
   });
 
   const dispatch = useDispatch();
   const { loggedInUser } = useSelector((state) => state.auth);
 
-  const handleClickOpen = ({ title, description, articleId }) => {
+  const handleClickOpen = ({ title, description, articleId, category }) => {
     setOpen(true);
     setModalForm({
       title,
       description,
       articleId,
+      category,
     });
   };
 
@@ -147,6 +153,24 @@ const ArticleCard = ({
             }}
             value={modalForm.description}
           />
+          <FormControl variant="standard" fullWidth>
+            <InputLabel>Sort By</InputLabel>
+            <Select
+              name="category"
+              value={modalForm.category}
+              onChange={(e) => {
+                setModalForm((prevState) => ({
+                  ...prevState,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
+            >
+              <MenuItem value="food">Food</MenuItem>
+              <MenuItem value="education">Education</MenuItem>
+              <MenuItem value="businessmen">Businessmen</MenuItem>
+              <MenuItem value="positions">Positions</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -157,6 +181,7 @@ const ArticleCard = ({
       </Dialog>
 
       <Card
+        className="article-card"
         sx={{ maxWidth: 345, m: 2, boxShadow: 3, "&:hover": { boxShadow: 6 } }}
       >
         <CardContent>
@@ -166,12 +191,17 @@ const ArticleCard = ({
                 {title}
               </Typography>
             </Grid>
-            {loggedInUser._id === createdBy._id && (
+            {loggedInUser?._id === createdBy?._id && (
               <Grid item xs={2}>
                 <Button
                   size="small"
                   onClick={() =>
-                    handleClickOpen({ title, description, articleId: _id })
+                    handleClickOpen({
+                      title,
+                      description,
+                      articleId: _id,
+                      category,
+                    })
                   }
                 >
                   Edit
@@ -182,7 +212,11 @@ const ArticleCard = ({
           <Typography variant="body2" color="text.secondary">
             Category: {capitalizeFirstLetter(category)}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            className="article-desc"
+          >
             {description.length > 200
               ? `${description.substring(0, 200)}...`
               : description}
@@ -197,7 +231,7 @@ const ArticleCard = ({
                   {new Date(createdAt).toLocaleDateString()}
                 </Typography>
               </Grid>
-              {loggedInUser._id === createdBy._id && (
+              {loggedInUser?._id === createdBy?._id && (
                 <Grid item xs={2}>
                   <Button size="small" onClick={() => handleDelete(_id)}>
                     <DeleteIcon fontSize="small" color="error" />

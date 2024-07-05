@@ -71,7 +71,16 @@ const checkSlugArticle = asyncHandler(async (req, res) => {
   }
 });
 
-const getSerchArticle = asyncHandler(async (req, res) => {
+const populateCreatedBy = async (articles) => {
+  const populatedArticles = await Article.populate(articles, {
+    path: "createdBy",
+    select: "username _id",
+  });
+
+  return populatedArticles;
+};
+
+const getSearchArticle = asyncHandler(async (req, res) => {
   const { q = "", sortField = "createdAt", sortBy = "desc" } = req.query;
 
   try {
@@ -101,7 +110,9 @@ const getSerchArticle = asyncHandler(async (req, res) => {
 
     const articles = await Article.aggregate(pipelineStages);
 
-    return res.status(200).json(new ApiResponse(200, articles, ""));
+    const populatedArticles = await populateCreatedBy(articles);
+
+    return res.status(200).json(new ApiResponse(200, populatedArticles, ""));
   } catch (error) {
     console.log({ error });
     throw new ApiError(500, "Something went wrong while get articles!");
@@ -118,7 +129,6 @@ const updateArticle = asyncHandler(async (req, res) => {
   }
 
   const articleData = await Article.findById(articleId);
-  console.log({ articleData });
 
   if (!articleData) {
     return res.status(404).json(new ApiResponse(404, {}, "Article not found!"));
@@ -177,7 +187,7 @@ const deleteArticle = asyncHandler(async (req, res) => {
 export {
   addArticle,
   checkSlugArticle,
-  getSerchArticle,
+  getSearchArticle,
   updateArticle,
   deleteArticle,
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -17,8 +17,7 @@ import { setIsLoggedIn } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
   const { isAuth } = useSelector((state) => state.auth);
 
@@ -27,16 +26,9 @@ const Navbar = () => {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const logoutHandler = async () => {
@@ -78,7 +70,7 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Bloggy
           </Typography>
 
           {isAuth && (
@@ -141,7 +133,7 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Bloggy
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {isAuth && (

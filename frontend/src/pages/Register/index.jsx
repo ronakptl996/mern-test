@@ -78,7 +78,7 @@ const Register = () => {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error("Something went wrong while login!!");
+      toast.error("Something went wrong while registering user!!");
     } finally {
       dispatch(setLoading(false));
     }
@@ -100,7 +100,7 @@ const Register = () => {
             <PersonIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign In
+            Sign Up
           </Typography>
           <Box
             component="form"
@@ -175,11 +175,11 @@ const Register = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/login">{"Do you have an account? Sign Up"}</Link>
+                <Link to="/login">{"Do you have an account? Sign In"}</Link>
               </Grid>
             </Grid>
           </Box>
